@@ -22,11 +22,19 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="cfg\constants.py" />
+    <Compile Include="cfg\__init__.py" />
     <Compile Include="grs.py" />
+    <Compile Include="ui\frames.py" />
+    <Compile Include="ui\__init__.py" />
+    <Compile Include="__init__.py" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="cfg" />
     <Folder Include="data\" />
     <Folder Include="data\classifier\" />
+    <Folder Include="sys\" />
+    <Folder Include="ui\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="data\classifier\haarcascade_frontalface_default.xml" />

@@ -38,7 +38,7 @@ global FACEDETECTCLASSIFIER
 ROOTFRAMENAME = "GRS-Dev"
 DATAPATHNAME = "./data/"
 CLASSIFIERDIRNAME = "classifier"
-CLASSIFIERFILENAME = "haarcascade_frontalface_default.xml"
+FACEDETECTCLASSIFIER = "haarcascade_frontalface_default.xml"
 #SYSLOGFILENAME = "sys_log.txt"
 #SYSLOGFRAMENAME = "System Log"
 #EVENTLOGFILENAME = "event_log.txt"
