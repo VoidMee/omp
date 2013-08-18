@@ -1,11 +1,13 @@
 import wx
+import cv2
 
 from cfg.constants import ROOTFRAMENAME
 from lib.grabber import Grabber
 
 class RootFrame(wx.Frame):
 
-    def __init__(self):
+    def __init__(self, parent):
+        self.parent = parent
         self._initializeComponents()
         self.Show()
 
@@ -39,9 +41,23 @@ class RootFrame(wx.Frame):
         self.sysEventLabel = wx.StaticText(parent=self.sysEventPanel, id=-1, label="Output:", pos=(10,10))
 
     def _onStartProject(self, event):
+        """
+        if self.runButton.Label == "Start Project":
+            try:
+                self.grabber = Grabber()
+            except Exception, ex:
+                self.sysEventLabel.SetLabel(ex.message)
+            self.runButton.SetLabel("Stop Project")
+            self.grabber.run()
+        elif self.runButton.Label == "Stop Project":
+            del self.grabber
+            self.runButton.Label = "Start Project"
+        """
         try:
             self.grabber = Grabber()
         except Exception, ex:
             self.sysEventLabel.SetLabel(ex.message)
-        self.runButton.SetLabel("Stop Project")
-        pass
+        else:
+            self.Hide()
+            self.grabber.run()
+            self.Show()

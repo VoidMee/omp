@@ -3,7 +3,7 @@ import numpy as np
 
 from cfg.constants import MAXCAMERAINDEX
 
-class Grabber(object):
+class Grabber():
     
     def __init__(self):
         print "djfk"
@@ -24,5 +24,21 @@ class Grabber(object):
             _, self.frame = self.capture.read()
         if self.frame == None:
             raise IOError
+
+    def run(self):
+        self.frameName = "GRS"
+        self.window = cv2.namedWindow(self.frameName, cv2.CV_WINDOW_AUTOSIZE)
+        while self.frame != None:
+            cv2.imshow(self.frameName, self.frame)
+            c = cv2.waitKey(1)
+            if c == 27:
+                cv2.destroyWindow(self.frameName)
+                break
+            self.frame = self.capture.read()[1]
+        pass
+
+    def __del__(self):
+        cv2.destroyWindow(self.frameName)
+        print "Grabber deleted"
 
 __all__ = ["Grabber"]

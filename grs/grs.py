@@ -6,7 +6,7 @@ from ui.frames import RootFrame
 class App(wx.App):
 
     def OnInit(self):
-        self.frame = RootFrame()
+        self.frame = RootFrame(self)
         return True
 
     def OnExit(self):
