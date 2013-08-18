@@ -25,6 +25,8 @@
     <Compile Include="cfg\constants.py" />
     <Compile Include="cfg\__init__.py" />
     <Compile Include="grs.py" />
+    <Compile Include="lib\grabber.py" />
+    <Compile Include="lib\__init__.py" />
     <Compile Include="ui\frames.py" />
     <Compile Include="ui\__init__.py" />
     <Compile Include="__init__.py" />
@@ -33,7 +35,7 @@
     <Folder Include="cfg" />
     <Folder Include="data\" />
     <Folder Include="data\classifier\" />
-    <Folder Include="sys\" />
+    <Folder Include="lib" />
     <Folder Include="ui\" />
   </ItemGroup>
   <ItemGroup>

@@ -30,6 +30,7 @@ global FACEDETECTCLASSIFIER
 
 #END [Global Defintions] =========================
 
+global MAXCAMERAINDEX
 
 
 #=================================================
@@ -44,11 +45,14 @@ FACEDETECTCLASSIFIER = "haarcascade_frontalface_default.xml"
 #EVENTLOGFILENAME = "event_log.txt"
 #EVENTLOGFRAMENAME = "Event Log"
 
+MAXCAMERAINDEX = 3
+
 #END [Global Assign] =============================
 
 __all__ = [
            "ROOTFRAMENAME",
            "DATAPATHNAME",
            "CLASSIFIERDIRNAME",
-           "FACEDETECTCLASSIFIER"
+           "FACEDETECTCLASSIFIER",
+           "MAXCAMERAINDEX"
            ]

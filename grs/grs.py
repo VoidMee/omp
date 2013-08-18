@@ -1,11 +1,12 @@
 import wx
 
-import ui.frames as frames
+from ui.frames import RootFrame
+#from sys.grabber import Grabber
 
 class App(wx.App):
 
     def OnInit(self):
-        self.frame = frames.RootFrame()
+        self.frame = RootFrame()
         return True
 
     def OnExit(self):
