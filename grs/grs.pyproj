@@ -24,5 +24,12 @@
   <ItemGroup>
     <Compile Include="grs.py" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="data\" />
+    <Folder Include="data\classifier\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="data\classifier\haarcascade_frontalface_default.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
 </Project>
