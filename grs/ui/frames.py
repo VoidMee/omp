@@ -1,6 +1,8 @@
 import wx
 import cv2
 
+import numpy as np
+
 from cfg.constants import ROOTFRAMENAME
 from lib.grabber import Grabber
 
@@ -21,7 +23,7 @@ class RootFrame(wx.Frame):
         #runButton to run the Project in Development Mode
         self.runButton = wx.Button(self.testPanel, label="Start Project", pos=(500, 15), size=(150,30))
         #self.runButton = wx.Button(self, label="Start Project", pos=(700, 15), size=(160,30))
-        self.Bind(wx.EVT_BUTTON, self._onStartProject, self.runButton)
+        self.Bind(wx.EVT_BUTTON, self._onOpen, self.runButton)
         #self.runButton.SetDefault();
 
         #settingButton for setting the project
@@ -40,18 +42,23 @@ class RootFrame(wx.Frame):
         #sysEventLabel for displaying output events
         self.sysEventLabel = wx.StaticText(parent=self.sysEventPanel, id=-1, label="Output:", pos=(10,10))
 
+        self.fileUploadDialog = wx.FileDialog(parent=self.testPanel, message="Choose a file", defaultDir="", defaultFile="", wildcard="*.*", style=0)
+
     def _onStartProject(self, event):
         """
-        if self.runButton.Label == "Start Project":
-            try:
-                self.grabber = Grabber()
-            except Exception, ex:
-                self.sysEventLabel.SetLabel(ex.message)
-            self.runButton.SetLabel("Stop Project")
-            self.grabber.run()
-        elif self.runButton.Label == "Stop Project":
-            del self.grabber
-            self.runButton.Label = "Start Project"
+        # Start with a numpy array style image I'll call "source"
+
+        # convert the colorspace to RGB from cv2 standard BGR, ensure input is uint8
+        img = cv2.cvtColor(np.uint8(source), cv2.cv.CV_BGR2RGB) 
+
+        # get the height and width of the source image for buffer construction
+        h, w = img.shape[:2]
+
+        # make a wx style bitmap using the buffer converter
+        wxbmp = wx.BitmapFromBuffer(w, h, img)
+
+        # Example of how to use this to set a static bitmap element called "bitmap_1"
+        self.bitmap_1.SetBitmap(wxbmp)
         """
         try:
             self.grabber = Grabber()
@@ -61,3 +68,10 @@ class RootFrame(wx.Frame):
             self.Hide()
             self.grabber.run()
             self.Show()
+        #"""
+
+    def _onOpen(self, event):
+        saveFileDialog = wx.FileDialog(self, "Save XYZ file", "", "", "XYZ files (*.xyz)|*.xyz", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+        if saveFileDialog.ShowModal() == wx.ID_CANCEL:
+            return     # the user changed idea...
+        output_stream = wx.FileOutputStream(saveFileDialog.GetPath())
