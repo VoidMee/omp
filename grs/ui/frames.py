@@ -77,7 +77,14 @@ class RootFrame(wx.Frame):
         #"""
 
     def _onOpen(self, event):
-        saveFileDialog = wx.FileDialog(self, "Save XYZ file", "", "", "Image files (*.jpg)|*.jpg | PNG files (*.png) | *.png | Bitmap image (*.bmp) | *.bmp | All files (*.*) | *.*", wx.FD_OPEN | wx.CHANGE_DIR | wx.MULTIPLE)
-        if saveFileDialog.ShowModal() == wx.ID_CANCEL:
-            return     # the user changed idea...
-        output_stream = wx.FileOutputStream(saveFileDialog.GetPath())
+        saveFileDialog = wx.FileDialog(self, "Save XYZ file", "", "", "JPEG (*.jpg)|*.jpg|Bitmap (*.bmp)|*.bmp|PNG (*.png)|*.png", wx.FD_OPEN | wx.CHANGE_DIR | wx.MULTIPLE)
+        retVal = saveFileDialog.ShowModal()
+        if retVal == wx.ID_CANCEL:
+            self.sysEventLabel.SetLabel("You Pressed Cancel")
+            #return     # the user changed idea...
+        elif retVal == wx.ID_OK:
+            outString = saveFileDialog.GetDirectory() + ": "
+            for item in saveFileDialog.GetFilenames():
+                outString += item
+            self.sysEventLabel.SetLabel(outString)
+        return
