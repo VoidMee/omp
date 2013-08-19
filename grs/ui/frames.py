@@ -77,7 +77,7 @@ class RootFrame(wx.Frame):
         #"""
 
     def _onOpen(self, event):
-        saveFileDialog = wx.FileDialog(self, "Save XYZ file", "", "", "Image files (*.jpg)|*.jpg", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+        saveFileDialog = wx.FileDialog(self, "Save XYZ file", "", "", "Image files (*.jpg)|*.jpg | PNG files (*.png) | *.png | Bitmap image (*.bmp) | *.bmp | All files (*.*) | *.*", wx.FD_OPEN | wx.CHANGE_DIR | wx.MULTIPLE)
         if saveFileDialog.ShowModal() == wx.ID_CANCEL:
             return     # the user changed idea...
         output_stream = wx.FileOutputStream(saveFileDialog.GetPath())
