@@ -25,6 +25,7 @@ global CLASSIFIERDIRNAME
 #global SYSTEMLOGDIRNAME
 
 global FACEDETECTCLASSIFIER
+global NNTRAINERFILENAME
 #global SYSLOGFILENAME
 #global EVENTLOGFILENAME
 
@@ -40,6 +41,7 @@ ROOTFRAMENAME = "GRS-Dev"
 DATAPATHNAME = "./data/"
 CLASSIFIERDIRNAME = "classifier"
 FACEDETECTCLASSIFIER = "haarcascade_frontalface_default.xml"
+NNTRAINERFILENAME = "neuralnetwork.txt"
 #SYSLOGFILENAME = "sys_log.txt"
 #SYSLOGFRAMENAME = "System Log"
 #EVENTLOGFILENAME = "event_log.txt"
@@ -54,5 +56,6 @@ __all__ = [
            "DATAPATHNAME",
            "CLASSIFIERDIRNAME",
            "FACEDETECTCLASSIFIER",
-           "MAXCAMERAINDEX"
+           "MAXCAMERAINDEX",
+           "NNTRAINERFILENAME"
            ]

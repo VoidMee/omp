@@ -15,4 +15,7 @@
     Showing output, logs and errors to the user.
 
 """
-__all__ = ["grabber"]
+__all__ = [
+           "grabber",
+           "trainer"
+           ]

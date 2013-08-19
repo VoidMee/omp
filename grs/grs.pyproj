@@ -26,6 +26,7 @@
     <Compile Include="cfg\__init__.py" />
     <Compile Include="grs.py" />
     <Compile Include="lib\grabber.py" />
+    <Compile Include="lib\trainer.py" />
     <Compile Include="lib\__init__.py" />
     <Compile Include="ui\frames.py" />
     <Compile Include="ui\__init__.py" />
@@ -40,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="data\classifier\haarcascade_frontalface_default.xml" />
+    <Content Include="data\classifier\neuralnetwork.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
 </Project>

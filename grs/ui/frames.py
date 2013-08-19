@@ -5,11 +5,15 @@ import numpy as np
 
 from cfg.constants import ROOTFRAMENAME
 from lib.grabber import Grabber
+from lib.trainer import NNTrainer
 
 class RootFrame(wx.Frame):
 
     def __init__(self, parent):
         self.parent = parent
+        self.trainingDatas = []
+        self.nnTrainer = NNTrainer()
+
         self._initializeComponents()
         self.Show()
 
@@ -21,9 +25,9 @@ class RootFrame(wx.Frame):
         self.trainPanel = wx.Panel(self, pos=(300, 0), size=(700, 500), style = wx.TAB_TRAVERSAL | wx.BORDER_SIMPLE)
 
         #runButton to run the Project in Development Mode
-        self.runButton = wx.Button(self.trainPanel, label="Start Training", pos=(500, 15), size=(150,30))
+        self.trainButton = wx.Button(self.trainPanel, label="Start Training", pos=(500, 15), size=(150,30))
         #self.runButton = wx.Button(self, label="Start Project", pos=(700, 15), size=(160,30))
-        self.Bind(wx.EVT_BUTTON, self._onOpen, self.runButton)
+        self.Bind(wx.EVT_BUTTON, self._startTraining, self.trainButton)
         #self.runButton.SetDefault();
 
         self.fileUploadLabel = wx.StaticText(parent=self.trainPanel, id=-1, label="Upload Image Data to train:", pos=(50, 70))
@@ -77,14 +81,24 @@ class RootFrame(wx.Frame):
         #"""
 
     def _onOpen(self, event):
-        saveFileDialog = wx.FileDialog(self, "Save XYZ file", "", "", "JPEG (*.jpg)|*.jpg|Bitmap (*.bmp)|*.bmp|PNG (*.png)|*.png", wx.FD_OPEN | wx.CHANGE_DIR | wx.MULTIPLE)
+        saveFileDialog = wx.FileDialog(self, "Open Training files", "", "", "JPEG (*.jpg)|*.jpg|Bitmap (*.bmp)|*.bmp|PNG (*.png)|*.png", wx.FD_OPEN | wx.CHANGE_DIR | wx.MULTIPLE)
         retVal = saveFileDialog.ShowModal()
         if retVal == wx.ID_CANCEL:
             self.sysEventLabel.SetLabel("You Pressed Cancel")
             #return     # the user changed idea...
         elif retVal == wx.ID_OK:
-            outString = saveFileDialog.GetDirectory() + ": "
-            for item in saveFileDialog.GetFilenames():
+            fileDirectory = saveFileDialog.GetDirectory()
+            outString = fileDirectory + ": "
+            fileNames = saveFileDialog.GetFilenames()
+            filePaths = [fileDirectory, fileNames]
+            self.trainingDatas.append(filePaths)
+            for item in fileNames:
                 outString += item
             self.sysEventLabel.SetLabel(outString)
+            del saveFileDialog
         return
+
+    def _startTraining(self, event):
+        self.sysEventLabel.SetLabel("Starting the training ..")
+        self.sysEventLabel.SetLabel(str(self.nnTrainer.trainNetwork(self.trainingDatas)))
+        pass
