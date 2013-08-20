@@ -40,6 +40,8 @@ class RootFrame(wx.Frame):
 
         self.captureButton = wx.Button(parent=self.trainPanel, label="Create Samples", pos=(500, 65), size=(150, 25))
         self.Bind(wx.EVT_BUTTON, self._onCaptureButton, self.captureButton)
+
+        self.trainingFilesList = wx.TextCtrl(parent=self.trainPanel, id=-1, value="", pos=(50, 100), size=(600, 350), style=wx.TE_RICH|wx.TE_MULTILINE)
         ###########################################################################################################################
         self.testPanel = wx.Panel(self, name="Train Classifier", pos=(0,0), size=(300,500), style = wx.TAB_TRAVERSAL | wx.BORDER_SIMPLE)
 
@@ -86,9 +88,13 @@ class RootFrame(wx.Frame):
         if retVal == wx.ID_OK:
             fileDirectory = saveFileDialog.GetDirectory()
             fileNames = saveFileDialog.GetFilenames()
+            if len(fileNames) == 1:
+                fileDirectory += "\\"
+            print len(fileNames)
             filePaths = [fileDirectory, fileNames]
             self.trainingDatas.append(filePaths) #save file paths for training
             del saveFileDialog
+        self._updateTrainingFilesOutput()
         return
 
     def _onTraining(self, event):
@@ -107,4 +113,14 @@ class RootFrame(wx.Frame):
             self.logMessage(ex.message)
         else:
             self.capturer.run()
+            self._updateTrainingFilesOutput()
         pass
+
+    def _updateTrainingFilesOutput(self):
+        print self.trainingDatas
+        self.trainingFilesList.SetLabelText("")
+        for datas in self.trainingDatas:
+            path = datas[0]
+            for filenames in datas[1]:
+                self.trainingFilesList.AppendText(path + filenames + "\n")
+        

@@ -33,7 +33,7 @@ global NNTRAINERFILENAME
 #END [Global Defintions] =========================
 
 global MAXCAMERAINDEX
-
+global TRAINDATAPATH
 global OUTPUTLISTS
 global FILEINDEX
 #=================================================
@@ -44,6 +44,7 @@ PROJECTDIR = "D:/workspace/python/omp/grs/"
 DATAPATHNAME = "data/"
 CLASSIFIERDIRNAME = "classifier/"
 
+TRAINDATAPATH = "D:\\grs_data\\"
 FACEDETECTCLASSIFIER = "haarcascade_frontalface_default.xml"
 NNTRAINERFILENAME = "neuralnetwork.xml"
 
@@ -72,5 +73,6 @@ __all__ = [
            "NNTRAINERFILENAME",
            "PROJECTDIR",
            "OUTPUTLISTS",
-           "FILEINDEX"
+           "FILEINDEX",
+           "TRAINDATAPATH"
            ]

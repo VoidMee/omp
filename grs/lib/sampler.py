@@ -44,7 +44,9 @@ class SampleCapturer(object):
                 cv2.destroyWindow(self.frameName)
                 break
             elif c == ord('s'):
-                cv2.imwrite("D:\grs_data\grs_" + str(FILEINDEX) + ".jpg", self.frame[self.selection[1]+1:self.selection[3]-1, self.selection[0]+1:self.selection[2]-1])
+                cv2.imwrite(TRAINDATAPATH + "grs_" + str(FILEINDEX) + ".jpg", self.frame[self.selection[1]+1:self.selection[3]-1, self.selection[0]+1:self.selection[2]-1])
+                push = [TRAINDATAPATH, ["grs_" + str(FILEINDEX) + ".jpg"]]
+                self.parent.trainingDatas.append(push)
                 FILEINDEX += 1
                 
             self.frame = self.capture.read()[1]
