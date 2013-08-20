@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="data\classifier\haarcascade_frontalface_default.xml" />
-    <Content Include="data\classifier\neuralnetwork.txt" />
+    <Content Include="data\classifier\neuralnetwork.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
 </Project>

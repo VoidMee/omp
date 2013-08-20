@@ -20,6 +20,7 @@ global ROOTFRAMENAME
 #global SYSLOGFRAMENAME
 #global EVENTLOGFRAMENAME
 
+global PROJECTDIR
 global DATAPATHNAME
 global CLASSIFIERDIRNAME
 #global SYSTEMLOGDIRNAME
@@ -38,10 +39,12 @@ global MAXCAMERAINDEX
 #START [Global Assign] ===========================
 
 ROOTFRAMENAME = "GRS-Dev"
-DATAPATHNAME = "./data/"
-CLASSIFIERDIRNAME = "classifier"
+PROJECTDIR = "D:/workspace/python/omp/grs/"
+DATAPATHNAME = "data/"
+CLASSIFIERDIRNAME = "classifier/"
+
 FACEDETECTCLASSIFIER = "haarcascade_frontalface_default.xml"
-NNTRAINERFILENAME = "neuralnetwork.txt"
+NNTRAINERFILENAME = "neuralnetwork.xml"
 #SYSLOGFILENAME = "sys_log.txt"
 #SYSLOGFRAMENAME = "System Log"
 #EVENTLOGFILENAME = "event_log.txt"
@@ -57,5 +60,6 @@ __all__ = [
            "CLASSIFIERDIRNAME",
            "FACEDETECTCLASSIFIER",
            "MAXCAMERAINDEX",
-           "NNTRAINERFILENAME"
+           "NNTRAINERFILENAME",
+           "PROJECTDIRNAME"
            ]
