@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 
 from cfg.constants import ROOTFRAMENAME
+from cfg.constants import FILEINDEX
 
 from lib.grabber import Grabber
 from lib.trainer import NNTrainer
@@ -42,6 +43,9 @@ class RootFrame(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self._onCaptureButton, self.captureButton)
 
         self.trainingFilesList = wx.TextCtrl(parent=self.trainPanel, id=-1, value="", pos=(50, 100), size=(600, 350), style=wx.TE_RICH|wx.TE_MULTILINE)
+
+        self.fileIndexLabel = wx.StaticText(parent=self.trainPanel, id=-1, label="Captued File Start index: ", pos =(130, 25))
+        self.fileIndex = wx.TextCtrl(self.trainPanel, -1, pos=(262, 22), size=(35,20))
         ###########################################################################################################################
         self.testPanel = wx.Panel(self, name="Train Classifier", pos=(0,0), size=(300,500), style = wx.TAB_TRAVERSAL | wx.BORDER_SIMPLE)
 

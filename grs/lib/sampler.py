@@ -36,7 +36,9 @@ class SampleCapturer(object):
             raise IOError
 
     def run(self):
-        global FILEINDEX
+        global FILEINDEX        
+        if self.parent.fileIndex.GetValue() != "":
+            FILEINDEX = int(self.parent.fileIndex.GetValue())
         while self.frame != None:
             cv2.imshow(self.frameName, self.frame)
             c = cv2.waitKey(1)
