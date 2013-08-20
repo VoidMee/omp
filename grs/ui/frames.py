@@ -33,6 +33,10 @@ class RootFrame(wx.Frame):
 
         self.settingButton = wx.Button(self.trainPanel, label="Settings", pos=(50,15), size=(60,30))
 
+        outputList = ['fist', 'point', 'open', 'none']
+        self.outputOptionRadio = wx.RadioBox(self.trainPanel, -1, "Output", (350, 15), wx.DefaultSize, outputList, 2, wx.RA_HORIZONTAL)
+
+
         ###########################################################################################################################
         self.testPanel = wx.Panel(self, name="Train Classifier", pos=(0,0), size=(300,500), style = wx.TAB_TRAVERSAL | wx.BORDER_SIMPLE)
 
@@ -76,27 +80,19 @@ class RootFrame(wx.Frame):
     def _onOpen(self, event):
         saveFileDialog = wx.FileDialog(self, "Open Training files", "", "", "JPEG (*.jpg)|*.jpg|Bitmap (*.bmp)|*.bmp|PNG (*.png)|*.png", wx.FD_OPEN | wx.CHANGE_DIR | wx.MULTIPLE)
         retVal = saveFileDialog.ShowModal()
-        if retVal == wx.ID_CANCEL:
-            self.sysEventLabel.SetLabel("You Pressed Cancel")
-            #return     # the user changed idea...
-        elif retVal == wx.ID_OK:
+        if retVal == wx.ID_OK:
             fileDirectory = saveFileDialog.GetDirectory()
-            outString = fileDirectory + ": "
             fileNames = saveFileDialog.GetFilenames()
             filePaths = [fileDirectory, fileNames]
-            self.trainingDatas.append(filePaths)
-            for item in fileNames:
-                outString += item
-            self.sysEventLabel.SetLabel(outString)
+            self.trainingDatas.append(filePaths) #save file paths for training
             del saveFileDialog
         return
 
     def _onTraining(self, event):
-
+        self.trainButton.Disable()
         nn = NNTrainer(self, self.trainingDatas)
         self.trainerThread = nn
         nn.start()
-        self.trainButton.Disable()
 
     def logMessage(self, msg):
         self.outputLog.AppendText(msg);
