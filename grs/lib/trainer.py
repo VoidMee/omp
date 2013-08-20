@@ -3,10 +3,7 @@ import numpy as np
 import threading
 import wx
 
-from cfg.constants import PROJECTDIR
-from cfg.constants import DATAPATHNAME
-from cfg.constants import CLASSIFIERDIRNAME
-from cfg.constants import NNTRAINERFILENAME
+from cfg.constants import *
 
 class NNTrainer(threading.Thread):
     
@@ -20,7 +17,7 @@ class NNTrainer(threading.Thread):
         self.nn = cv2.ANN_MLP(np.array([128, 128, 128, 4]), cv2.ANN_MLP_SIGMOID_SYM)
         
         # Load Previouly trained data
-        self.nn.load(DATAPATHNAME + CLASSIFIERDIRNAME + NNTRAINERFILENAME)
+        self.nn.load(PROJECTDIR + DATAPATHNAME + CLASSIFIERDIRNAME + NNTRAINERFILENAME)
         
         self.trainingDatas =[]
         self.detector = cv2.SURF(400, 5, 5)
@@ -74,7 +71,11 @@ class NNTrainer(threading.Thread):
         # Beginning the training Phase
         wx.CallAfter(self.parent.logMessage, "Running the training phase ...\n")
 
-        outputValues = [[1.0, 0., 0., 0.]] * len(self.trainingDatas)
+        selection = self.parent.outputOptionRadio.GetStringSelection()
+        output = OUTPUTLISTS[selection]
+
+        wx.CallAfter(self.parent.logMessage, "** for " + selection + " with output: " + str(output) + "\n")
+        outputValues = [output] * len(self.trainingDatas)
 
         self.nn.train(np.array(self.trainingDatas), np.array(outputValues), None)
         #print(DATAPATHNAME + CLASSIFIERDIRNAME + NNTRAINERFILENAME)

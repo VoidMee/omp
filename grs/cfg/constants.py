@@ -34,7 +34,7 @@ global NNTRAINERFILENAME
 
 global MAXCAMERAINDEX
 
-
+global OUTPUTLISTS
 #=================================================
 #START [Global Assign] ===========================
 
@@ -45,6 +45,13 @@ CLASSIFIERDIRNAME = "classifier/"
 
 FACEDETECTCLASSIFIER = "haarcascade_frontalface_default.xml"
 NNTRAINERFILENAME = "neuralnetwork.xml"
+
+OUTPUTLISTS = {
+               'fist': [1., 0., 0., 0.],
+               'point': [0., 1., 0., 0.],
+               'open' : [0., 0., 1., 0.],
+               'none' : [0., 0., 0., 1.]
+               }
 #SYSLOGFILENAME = "sys_log.txt"
 #SYSLOGFRAMENAME = "System Log"
 #EVENTLOGFILENAME = "event_log.txt"
@@ -61,5 +68,6 @@ __all__ = [
            "FACEDETECTCLASSIFIER",
            "MAXCAMERAINDEX",
            "NNTRAINERFILENAME",
-           "PROJECTDIRNAME"
+           "PROJECTDIR",
+           "OUTPUTLISTS"
            ]
