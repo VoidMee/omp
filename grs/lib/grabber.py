@@ -6,7 +6,6 @@ from cfg.constants import MAXCAMERAINDEX
 class Grabber():
     
     def __init__(self):
-        print "djfk"
         try:
             self._checkDevice()
         except IOError:
@@ -35,7 +34,6 @@ class Grabber():
                 cv2.destroyWindow(self.frameName)
                 break
             self.frame = self.capture.read()[1]
-        pass
 
     def __del__(self):
         cv2.destroyWindow(self.frameName)

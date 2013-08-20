@@ -26,6 +26,7 @@
     <Compile Include="cfg\__init__.py" />
     <Compile Include="grs.py" />
     <Compile Include="lib\grabber.py" />
+    <Compile Include="lib\sampler.py" />
     <Compile Include="lib\trainer.py" />
     <Compile Include="lib\__init__.py" />
     <Compile Include="ui\frames.py" />

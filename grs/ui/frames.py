@@ -4,8 +4,10 @@ import cv2
 import numpy as np
 
 from cfg.constants import ROOTFRAMENAME
+
 from lib.grabber import Grabber
 from lib.trainer import NNTrainer
+from lib.sampler import SampleCapturer
 
 class RootFrame(wx.Frame):
 
@@ -36,7 +38,8 @@ class RootFrame(wx.Frame):
         outputList = ['fist', 'point', 'open', 'none']
         self.outputOptionRadio = wx.RadioBox(self.trainPanel, -1, "Output", (350, 15), wx.DefaultSize, outputList, 2, wx.RA_HORIZONTAL)
 
-
+        self.captureButton = wx.Button(parent=self.trainPanel, label="Create Samples", pos=(500, 65), size=(150, 25))
+        self.Bind(wx.EVT_BUTTON, self._onCaptureButton, self.captureButton)
         ###########################################################################################################################
         self.testPanel = wx.Panel(self, name="Train Classifier", pos=(0,0), size=(300,500), style = wx.TAB_TRAVERSAL | wx.BORDER_SIMPLE)
 
@@ -97,3 +100,11 @@ class RootFrame(wx.Frame):
     def logMessage(self, msg):
         self.outputLog.AppendText(msg);
         
+    def _onCaptureButton(self, event):
+        try:
+            self.capturer = SampleCapturer(self)
+        except Exception, ex:
+            self.logMessage(ex.message)
+        else:
+            self.capturer.run()
+        pass

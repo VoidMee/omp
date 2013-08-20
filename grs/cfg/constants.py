@@ -35,6 +35,7 @@ global NNTRAINERFILENAME
 global MAXCAMERAINDEX
 
 global OUTPUTLISTS
+global FILEINDEX
 #=================================================
 #START [Global Assign] ===========================
 
@@ -52,6 +53,7 @@ OUTPUTLISTS = {
                'open' : [0., 0., 1., 0.],
                'none' : [0., 0., 0., 1.]
                }
+FILEINDEX = 0
 #SYSLOGFILENAME = "sys_log.txt"
 #SYSLOGFRAMENAME = "System Log"
 #EVENTLOGFILENAME = "event_log.txt"
@@ -69,5 +71,6 @@ __all__ = [
            "MAXCAMERAINDEX",
            "NNTRAINERFILENAME",
            "PROJECTDIR",
-           "OUTPUTLISTS"
+           "OUTPUTLISTS",
+           "FILEINDEX"
            ]
