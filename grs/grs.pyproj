@@ -25,8 +25,11 @@
     <Compile Include="cfg\constants.py" />
     <Compile Include="cfg\__init__.py" />
     <Compile Include="grs.py" />
+    <Compile Include="lib\detector.py" />
     <Compile Include="lib\grabber.py" />
+    <Compile Include="lib\handler.py" />
     <Compile Include="lib\sampler.py" />
+    <Compile Include="lib\tracker.py" />
     <Compile Include="lib\trainer.py" />
     <Compile Include="lib\__init__.py" />
     <Compile Include="run.py" />
