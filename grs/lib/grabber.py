@@ -3,13 +3,14 @@ import numpy as np
 
 from cfg.constants import MAXCAMERAINDEX
 
-class Grabber():
+class FrameGrabber():
     
     def __init__(self):
         try:
             self._checkDevice()
         except IOError:
-            raise Exception("No Capturing Device Found. Please make sure the hardward is properly connected or drivers are missing.")
+            raise IOError("No Capturing Device Found. Please make sure the hardward is properly connected or drivers are missing.")
+            
 
     def _checkDevice(self):
         self.currentCameraIndex = 0
@@ -23,7 +24,7 @@ class Grabber():
             _, self.frame = self.capture.read()
         if self.frame == None:
             raise IOError
-
+    """
     def run(self):
         self.frameName = "GRS"
         self.window = cv2.namedWindow(self.frameName, cv2.CV_WINDOW_AUTOSIZE)
@@ -38,5 +39,5 @@ class Grabber():
     def __del__(self):
         cv2.destroyWindow(self.frameName)
         print "Grabber deleted"
-
-__all__ = ["Grabber"]
+    """
+__all__ = ["FrameGrabber"]

@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 import wx
 
-from lib.grabber import Grabber
 from cfg.constants import *
 
 class SampleCapturer(object):
