@@ -25,6 +25,7 @@ class GRS(object):
         self.skins = None
         self.selection = (120, 120, 80, 80)
         self.hist = None
+        self.crit = ( cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_MAX_ITER, 10, 1)
 
     def initialize(self):
         print "initializing grs.."
@@ -166,15 +167,58 @@ class GRS(object):
         hsv = cv2.cvtColor(self.skins, cv2.COLOR_BGR2HSV)
         self.hist = cv2.calcHist([hsv], [0, 1], mask, [36,50], [0, 180, 0, 255])
 
+    def run(self):
+
+        frame = self._grabber.grabNext()
+        selection = self.selection
+        while frame != None:
+            temp = frame
+            """
+            for (x, y, w, h),n in faces:
+                cv2.rectangle(frame, (x,y), (x+w, y+2*h), (0, 0, 0), cv.CV_FILLED)
+            """
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+            frame = cv2.medianBlur(frame, 5)
+            frame = cv2.calcBackProject([frame], [0, 1], self.hist, ranges=[0, 180, 0, 255], scale=1.0)
+            retval, window = cv2.CamShift(frame, selection, self.crit)
+            print "retval: ", retval
+            if window[0] != 0 and window[1] != 0 and window[2] != 0 and window[3] != 0:
+                selection = window
+            #cv2.rectangle(frame, (int(selection[0] - 0.2 * selection[2]), int(selection[1] - 0.18 * selection[3])), (selection[0] + selection[3], int(selection[1] + 1.8 * selection[2])), (255, 255, 255), 3)
+            cv2.rectangle(frame, (int(selection[0] - 0.2 * selection[2]), int(selection[1] - 0.18 * selection[3])), (int(selection[0] + 1.4 * selection[2]), int(selection[1] + selection[3])), (255, 255, 255), 3)
+
+            x = int(selection[0] - 0.2 * selection[2])
+            y = int(selection[1] - 0.18 * selection[3])
+            w = int(1.8 * selection[2])
+            h = int(1.3 * selection[3])
+
+            print x, y, w, h
+            if x > 0 and y > 0 and w > 0 and h > 0 and (x + w) < frame.shape[1] and (y + h) < frame.shape[0]:
+                #preview = cv.GetSubRect(cv.fromarray(temp), (x, y, w, h))
+                preview = temp[y:y+h, x:x+w]
+                #cv2.imshow("hand", np.array(preview))
+                cv2.imshow("hand", preview)
+
+            cv2.imshow(self.winname, frame)
+            c = cv2.waitKey(1)
+            if c == 27:
+                cv2.destroyWindow(self.winname)
+                cv2.destroyWindow("hand")
+                break
+            frame = self._grabber.grabNext()
+        raw_input()
+        cv2.destroyAllWindows()
 if __name__ == "__main__":
 
     try:
         grs = GRS()
+
+        #Initialize first
+        grs.initialize()
+
+        #Run the system
+        grs.run()
     except IOError, ex:
         print ex.message
-    except Exception, ex:
-        print ex.message
-    else:
-        grs.initialize()
 
     raw_input()

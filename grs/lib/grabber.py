@@ -24,6 +24,12 @@ class FrameGrabber():
             _, self.frame = self.capture.read()
         if self.frame == None:
             raise IOError
+    def grabNext(self):
+        self.frame = self.capture.read()[1]
+        if self.frame != None:
+            return self.frame
+        else:
+            raise IOError("No Capturing Device found. Please make sure the hardward is properly connected or drivers are missing.")
     """
     def run(self):
         self.frameName = "GRS"
