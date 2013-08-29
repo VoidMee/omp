@@ -14,7 +14,7 @@ class NNTrainer(threading.Thread):
         # No.of Hidden Layers = 2
         # [128, 128, 128, 4]
         #
-        self.nn = cv2.ANN_MLP(np.array([128, 128, 128, 4]), cv2.ANN_MLP_SIGMOID_SYM)
+        self.nn = cv2.ANN_MLP(np.array([128, 128, 128, 3]), cv2.ANN_MLP_SIGMOID_SYM)
         
         # Load Previouly trained data
         self.nn.load(PROJECTDIR + DATAPATHNAME + CLASSIFIERDIRNAME + NNTRAINERFILENAME)
@@ -54,8 +54,9 @@ class NNTrainer(threading.Thread):
                 break
             wx.CallAfter(self.parent.logMessage, "Extracting features of " + file + " ...\n")
             k, d = self.detector.detectAndCompute(img, None)
-            m, e = cv2.PCACompute(d)
-            self.trainingDatas.append(m[0])
+            if d != None:
+                m, e = cv2.PCACompute(d)
+                self.trainingDatas.append(m[0])
 
         wx.CallAfter(self.parent.logMessage, "Features extracted\n")
         if flag == True:

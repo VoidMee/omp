@@ -28,6 +28,7 @@
     <Compile Include="lib\detector.py" />
     <Compile Include="lib\grabber.py" />
     <Compile Include="lib\handler.py" />
+    <Compile Include="lib\recognizer.py" />
     <Compile Include="lib\sampler.py" />
     <Compile Include="lib\tracker.py" />
     <Compile Include="lib\trainer.py" />
@@ -45,8 +46,10 @@
     <Folder Include="ui\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="data\classifier\fist.xml" />
     <Content Include="data\classifier\haarcascade_frontalface_default.xml" />
     <Content Include="data\classifier\neuralnetwork.xml" />
+    <Content Include="data\classifier\palm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
 </Project>

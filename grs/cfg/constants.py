@@ -26,6 +26,8 @@ global CLASSIFIERDIRNAME
 #global SYSTEMLOGDIRNAME
 
 global FACEDETECTCLASSIFIER
+global FISTDETECTCLASSIFIER
+global PALMDETECTCLASSIFIER
 global NNTRAINERFILENAME
 #global SYSLOGFILENAME
 #global EVENTLOGFILENAME
@@ -46,13 +48,14 @@ CLASSIFIERDIRNAME = "classifier/"
 
 TRAINDATAPATH = "D:\\grs_data\\"
 FACEDETECTCLASSIFIER = "haarcascade_frontalface_default.xml"
+FISTDETECTCLASSIFIER = "fist.xml"
+PALMDETECTCLASSIFIER = "palm.xml"
 NNTRAINERFILENAME = "neuralnetwork.xml"
 
 OUTPUTLISTS = {
-               'fist': [1., 0., 0., 0.],
-               'point': [0., 1., 0., 0.],
-               'open' : [0., 0., 1., 0.],
-               'none' : [0., 0., 0., 1.]
+               'fist': [1., 0., 0.],
+               'open': [0., 1., 0.],
+               'none' : [0., 0., 1.]
                }
 FILEINDEX = 0
 #SYSLOGFILENAME = "sys_log.txt"
@@ -74,5 +77,7 @@ __all__ = [
            "PROJECTDIR",
            "OUTPUTLISTS",
            "FILEINDEX",
-           "TRAINDATAPATH"
+           "TRAINDATAPATH",
+           "FISTDETECTCLASSIFIER",
+           "PALMDETECTCLASSIFIER"
            ]

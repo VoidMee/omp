@@ -6,7 +6,7 @@ import numpy as np
 from cfg.constants import ROOTFRAMENAME
 from cfg.constants import FILEINDEX
 
-from lib.grabber import Grabber
+from lib.grabber import FrameGrabber
 from lib.trainer import NNTrainer
 from lib.sampler import SampleCapturer
 
@@ -36,7 +36,7 @@ class RootFrame(wx.Frame):
 
         self.settingButton = wx.Button(self.trainPanel, label="Settings", pos=(50,15), size=(60,30))
 
-        outputList = ['fist', 'point', 'open', 'none']
+        outputList = ['fist', 'open', 'none']
         self.outputOptionRadio = wx.RadioBox(self.trainPanel, -1, "Output", (350, 15), wx.DefaultSize, outputList, 2, wx.RA_HORIZONTAL)
 
         self.captureButton = wx.Button(parent=self.trainPanel, label="Create Samples", pos=(500, 65), size=(150, 25))
@@ -77,7 +77,7 @@ class RootFrame(wx.Frame):
         self.bitmap_1.SetBitmap(wxbmp)
         """
         try:
-            self.grabber = Grabber()
+            self.grabber = FrameGrabber()
         except Exception, ex:
             self.sysEventLabel.SetLabel(ex.message)
         else:

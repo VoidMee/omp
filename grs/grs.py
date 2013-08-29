@@ -2,6 +2,10 @@ import cv2
 import numpy as np
 
 from lib.grabber import FrameGrabber
+from lib.detector import BProjectionDetector
+from lib.tracker import CamShiftTracker
+from lib.handler import MouseHandler
+from lib.recognizer import HandRecognizer
 
 from cfg.constants import PROJECTDIR
 from cfg.constants import DATAPATHNAME
@@ -169,6 +173,21 @@ class GRS(object):
 
     def run(self):
 
+        #detector
+        self._detector = BProjectionDetector(self.hist)
+
+        #tracker
+        self._tracker = CamShiftTracker(self.crit)
+
+        #recognizer
+        self._recognizer = HandRecognizer()
+
+        #handler
+        self._handler = MouseHandler()
+        
+        self._fc = cv2.cv.Load(PROJECTDIR + DATAPATHNAME + CLASSIFIERDIRNAME + "fist.xml")
+        self._pc = cv2.cv.Load(PROJECTDIR + DATAPATHNAME + CLASSIFIERDIRNAME + "palm.xml")
+
         frame = self._grabber.grabNext()
         selection = self.selection
         while frame != None:
@@ -176,12 +195,18 @@ class GRS(object):
             """
             for (x, y, w, h),n in faces:
                 cv2.rectangle(frame, (x,y), (x+w, y+2*h), (0, 0, 0), cv.CV_FILLED)
-            """
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
             frame = cv2.medianBlur(frame, 5)
             frame = cv2.calcBackProject([frame], [0, 1], self.hist, ranges=[0, 180, 0, 255], scale=1.0)
-            retval, window = cv2.CamShift(frame, selection, self.crit)
-            print "retval: ", retval
+            """
+            #detection
+            frame = self._detector.detect(frame)
+
+            #tracking
+            retval, window = self._tracker.track(frame, selection)
+            #retval, window = cv2.CamShift(frame, selection, self.crit)
+            #print "retval: ", retval
+
             if window[0] != 0 and window[1] != 0 and window[2] != 0 and window[3] != 0:
                 selection = window
             #cv2.rectangle(frame, (int(selection[0] - 0.2 * selection[2]), int(selection[1] - 0.18 * selection[3])), (selection[0] + selection[3], int(selection[1] + 1.8 * selection[2])), (255, 255, 255), 3)
@@ -195,6 +220,8 @@ class GRS(object):
             print x, y, w, h
             if x > 0 and y > 0 and w > 0 and h > 0 and (x + w) < frame.shape[1] and (y + h) < frame.shape[0]:
                 #preview = cv.GetSubRect(cv.fromarray(temp), (x, y, w, h))
+                #preview = self._recognizer.recognize(temp[y:y+h, x:x+w])
+                #preview = self._detector.detect(temp[y:y+h, x:x+w])
                 preview = temp[y:y+h, x:x+w]
                 #cv2.imshow("hand", np.array(preview))
                 cv2.imshow("hand", preview)
