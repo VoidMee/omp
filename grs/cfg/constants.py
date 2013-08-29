@@ -33,12 +33,13 @@ global NNTRAINERFILENAME
 #global EVENTLOGFILENAME
 
 #END [Global Defintions] =========================
-
+global SKINDIRNAME
 global MAXCAMERAINDEX
 global TRAINDATAPATH
 global OUTPUTLISTS
 global FILEINDEX
 global OUTPUTCLASSCOUNTS
+global SKINFILENAME
 #=================================================
 #START [Global Assign] ===========================
 
@@ -46,8 +47,9 @@ ROOTFRAMENAME = "GRS-Dev"
 PROJECTDIR = "D:/workspace/python/omp/grs/"
 DATAPATHNAME = "data/"
 CLASSIFIERDIRNAME = "classifier/"
-
-TRAINDATAPATH = "D:\\grs_data\\"
+SKINDIRNAME = "skins/"
+SKINFILENAME = "skin_001.ppm"
+TRAINDATAPATH = "D:/grs_data/"
 FACEDETECTCLASSIFIER = "haarcascade_frontalface_default.xml"
 FISTDETECTCLASSIFIER = "fist.xml"
 PALMDETECTCLASSIFIER = "palm.xml"
@@ -81,5 +83,7 @@ __all__ = [
            "TRAINDATAPATH",
            "FISTDETECTCLASSIFIER",
            "PALMDETECTCLASSIFIER",
-           "OUTPUTCLASSCOUNTS"
+           "OUTPUTCLASSCOUNTS",
+           "SKINDIRNAME",
+           "SKINFILENAME"
            ]

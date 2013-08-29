@@ -1,6 +1,67 @@
-import cv2
 import numpy as np
+import cv2
 
+from cfg.constants import *
+from lib.grabber import FrameGrabber
+from lib.detector import BProjectionDetector
+from lib.tracker import CamShiftTracker
+
+class GRS(object):
+    def __init__(self):
+        #initialize frame grabber
+        self._grabber = FrameGrabber()
+
+        #learn skin 
+        self._learnHist()
+        self._winname = "GRS"
+
+        #intialize detector
+        self._detector = BProjectionDetector(self._hist)
+
+        self._selection = (120, 120, 80, 80)
+        #initialize tracker
+        self._tracker = CamShiftTracker(( cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_MAX_ITER, 10, 1))
+
+        #initialize recognizer
+        #self._recognizer 
+    def _learnHist(self):
+        skin = cv2.imread(PROJECTDIR + DATAPATHNAME + SKINDIRNAME + SKINFILENAME)
+        gray = cv2.cvtColor(skin, cv2.COLOR_BGR2GRAY)
+        _, mask = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY)
+        hsv = cv2.cvtColor(skin, cv2.COLOR_BGR2HSV)
+        self._hist = cv2.calcHist([hsv], [0, 1], mask, [36, 50], [0, 180, 0, 255])
+        pass
+
+    def _grabNext(self):
+        self._frame = self._grabber.grabNext()
+
+
+    def run(self):
+        self._grabNext()
+        while self._frame != None:
+
+            tmp_frame = self._detector.detect(self._frame)
+
+            retval, (x, y, w, h) = self._tracker.track(tmp_frame, self._selection)
+            if all((x, y, w, h)) > 0:
+                self._selection = (x, y, w, h)
+
+            cv2.imshow(self._winname, self._frame)
+
+            c = cv2.waitKey(1)
+            if c == 27:
+                cv2.destroyWindow(self._winname)
+                break
+
+            self._grabNext()
+        cv2.destroyAllWindows()
+        pass
+
+if __name__ == "__main__":
+    grs = GRS()
+
+    grs.run()
+"""
 from lib.grabber import FrameGrabber
 from lib.detector import BProjectionDetector
 from lib.tracker import CamShiftTracker
@@ -192,13 +253,11 @@ class GRS(object):
         selection = self.selection
         while frame != None:
             temp = frame
-            """
             for (x, y, w, h),n in faces:
                 cv2.rectangle(frame, (x,y), (x+w, y+2*h), (0, 0, 0), cv.CV_FILLED)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
             frame = cv2.medianBlur(frame, 5)
             frame = cv2.calcBackProject([frame], [0, 1], self.hist, ranges=[0, 180, 0, 255], scale=1.0)
-            """
             #detection
             frame = self._detector.detect(frame)
 
@@ -249,3 +308,4 @@ if __name__ == "__main__":
         print ex.message
 
     raw_input()
+"""
