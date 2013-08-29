@@ -8,6 +8,7 @@ from cfg.constants import FILEINDEX
 
 from lib.grabber import FrameGrabber
 from lib.trainer import NNTrainer
+from lib.trainer import BoostTrainer
 from lib.sampler import SampleCapturer
 
 class RootFrame(wx.Frame):
@@ -103,9 +104,14 @@ class RootFrame(wx.Frame):
 
     def _onTraining(self, event):
         self.trainButton.Disable()
+        boost = BoostTrainer(self, self.trainingDatas)
+        self.trainerThread = boost
+        boost.start()
+        """
         nn = NNTrainer(self, self.trainingDatas)
         self.trainerThread = nn
         nn.start()
+        """
 
     def logMessage(self, msg):
         self.outputLog.AppendText(msg);

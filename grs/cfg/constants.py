@@ -38,6 +38,7 @@ global MAXCAMERAINDEX
 global TRAINDATAPATH
 global OUTPUTLISTS
 global FILEINDEX
+global OUTPUTCLASSCOUNTS
 #=================================================
 #START [Global Assign] ===========================
 
@@ -51,7 +52,7 @@ FACEDETECTCLASSIFIER = "haarcascade_frontalface_default.xml"
 FISTDETECTCLASSIFIER = "fist.xml"
 PALMDETECTCLASSIFIER = "palm.xml"
 NNTRAINERFILENAME = "neuralnetwork.xml"
-
+OUTPUTCLASSCOUNTS = 3
 OUTPUTLISTS = {
                'fist': [1., 0., 0.],
                'open': [0., 1., 0.],
@@ -79,5 +80,6 @@ __all__ = [
            "FILEINDEX",
            "TRAINDATAPATH",
            "FISTDETECTCLASSIFIER",
-           "PALMDETECTCLASSIFIER"
+           "PALMDETECTCLASSIFIER",
+           "OUTPUTCLASSCOUNTS"
            ]
