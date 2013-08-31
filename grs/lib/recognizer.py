@@ -21,8 +21,25 @@ class HandRecognizer(Recognizer):
         
         #initializef feature extractor
         self._featureExtractor = cv2.SURF(400, 4, nOctaveLayers=4, extended=False)
+
+        self.fc = cv2.cv.Load(PROJECTDIR + DATAPATHNAME + CLASSIFIERDIRNAME + FISTDETECTCLASSIFIER)
+        self.pc = cv2.cv.Load(PROJECTDIR + DATAPATHNAME + CLASSIFIERDIRNAME + PALMDETECTCLASSIFIER)
+        self.fbuffer = cv2.cv.CreateMemStorage()
+        #self.pbuffer = cv2.cv.CreateMemStorage()
         #self._es = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 4))
         pass
+
+    def haarRecognize(self, frame, (x, y, w, h)):
+        hand = (frame[y:y+h, x:x+w]).copy()
+
+        fist = cv2.cv.HaarDetectObjects(cv2.cv.fromarray(hand), self.fc, self.fbuffer)
+        palm = cv2.cv.HaarDetectObjects(cv2.cv.fromarray(hand), self.pc, self.fbuffer)
+
+        if len(fist) > 0:
+            return 0
+        elif len(palm) > 0:
+            return 1
+        else: return 2
 
     def recognize(self, frame, (x, y, w, h)):
         hand = frame[y:y+h, x:x+w]

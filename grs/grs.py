@@ -94,9 +94,9 @@ class GRS(object):
                 #cv2.putText(temp_frame, str(x) + str(y) + str(w) + str(h), (30, 30), cv2.FONT_HERSHEY_COMPLEX, 1, (200, 0, 0))
                 
                 #recognize
-                posture = self._recognizer.recognize(temp_frame, self._selection)
+                posture = self._recognizer.haarRecognize(temp_frame, self._selection)
 
-                print postures[posture]
+                #print postures[posture]
 
                 #handle mouse event
                 self._handler.handle((x, y, w, h), posture)
