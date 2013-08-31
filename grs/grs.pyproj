@@ -32,6 +32,7 @@
     <Compile Include="lib\sampler.py" />
     <Compile Include="lib\tracker.py" />
     <Compile Include="lib\trainer.py" />
+    <Compile Include="lib\util.py" />
     <Compile Include="lib\__init__.py" />
     <Compile Include="run.py" />
     <Compile Include="ui\frames.py" />

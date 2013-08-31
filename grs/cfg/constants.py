@@ -24,11 +24,12 @@ global PROJECTDIR
 global DATAPATHNAME
 global CLASSIFIERDIRNAME
 #global SYSTEMLOGDIRNAME
-
+global FRAMESIZE
 global FACEDETECTCLASSIFIER
 global FISTDETECTCLASSIFIER
 global PALMDETECTCLASSIFIER
 global NNTRAINERFILENAME
+global MODELNAME
 #global SYSLOGFILENAME
 #global EVENTLOGFILENAME
 
@@ -48,19 +49,21 @@ PROJECTDIR = "D:/workspace/python/omp/grs/"
 DATAPATHNAME = "data/"
 CLASSIFIERDIRNAME = "classifier/"
 SKINDIRNAME = "skins/"
-SKINFILENAME = "skin_001.ppm"
+SKINFILENAME = "skin_004.jpg"
 TRAINDATAPATH = "D:/grs_data/"
 FACEDETECTCLASSIFIER = "haarcascade_frontalface_default.xml"
 FISTDETECTCLASSIFIER = "fist.xml"
 PALMDETECTCLASSIFIER = "palm.xml"
 NNTRAINERFILENAME = "neuralnetwork.xml"
 OUTPUTCLASSCOUNTS = 3
+MODELNAME = "model_own_fist_a.xml"
 OUTPUTLISTS = {
                'fist': [1., 0., 0.],
                'open': [0., 1., 0.],
                'none' : [0., 0., 1.]
                }
 FILEINDEX = 0
+FRAMESIZE = (640, 480)
 #SYSLOGFILENAME = "sys_log.txt"
 #SYSLOGFRAMENAME = "System Log"
 #EVENTLOGFILENAME = "event_log.txt"
@@ -85,5 +88,7 @@ __all__ = [
            "PALMDETECTCLASSIFIER",
            "OUTPUTCLASSCOUNTS",
            "SKINDIRNAME",
-           "SKINFILENAME"
+           "SKINFILENAME",
+           "MODELNAME",
+           "FRAMESIZE"
            ]

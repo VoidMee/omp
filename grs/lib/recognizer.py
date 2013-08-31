@@ -1,11 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-from cfg.constants import PROJECTDIR
-from cfg.constants import TRAINDATAPATH
-from cfg.constants import FISTDETECTCLASSIFIER
-from cfg.constants import PALMDETECTCLASSIFIER
-from cfg.constants import DATAPATHNAME
-from cfg.constants import CLASSIFIERDIRNAME
+from cfg.constants import *
 
 import cv2
 import numpy as np
@@ -20,38 +15,32 @@ class Recognizer(object):
 class HandRecognizer(Recognizer):
 
     def __init__(self):
-        #self._fc = cv2.cv.Load(PROJECTDIR + DATAPATHNAME + CLASSIFIERDIRNAME + "fist.xml")
-        #self._pc = cv2.cv.Load(PROJECTDIR + DATAPATHNAME + CLASSIFIERDIRNAME + "palm.xml")
-        self._es = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 4))
+        #initialize the boost tree
+        self._boost = cv2.GBTrees()
+        self._boost.load(PROJECTDIR + DATAPATHNAME + MODELNAME)
+        
+        #initializef feature extractor
+        self._featureExtractor = cv2.SURF(400, 4, nOctaveLayers=4, extended=False)
+        #self._es = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 4))
         pass
 
-    def recognize(self, frame):
-        #blurring
-        self._frame = cv2.medianBlur(frame, 5)
+    def recognize(self, frame, (x, y, w, h)):
+        hand = frame[y:y+h, x:x+w]
+        k, d = self._featureExtractor.detectAndCompute(hand, None)
+        if d != None:
+            m, e = cv2.PCACompute(d)
+            
+            for idxs in range(len(m)):
+                for idx in range(len(m[idxs])):
+                    m[idxs][idx] = int(m[idxs][idx] * 1000)
 
-        #grayscale conversion
-        #self._frame = cv2.cvtColor(self._frame, cv2.COLOR_BGR2GRAY)
-
-        #thresholding
-        #_, self._frame = cv2.threshold(self._frame, 100,255, cv2.THRESH_BINARY_INV)
-
-        #erosion
-        self._frame = cv2.erode(self._frame, np.ones((3,3), np.uint8))
-
-        #dilation
-        self._frame = cv2.dilate(self._frame, self._es)
-
-        return self._frame
-
-        """
-        self._fists = cv2.cv.HaarDetectObjects(cv2.cv.fromarray(self._frame), self._fc, cv2.cv.CreateMemStorage())
-        self._palms = cv2.cv.HaarDetectObjects(cv2.cv.fromarray(self._frame), self._pc, cv2.cv.CreateMemStorage())
-
-        if len(self._fists) > 0:
-            print "Detected fist"
-        elif len(self._palms) > 0:
-            print "palms"
-        else:
-            print "Detected None"
-        return self._frame
-        """
+            temp = np.array(m, dtype=np.float32)
+            sample_n, var_n = temp.shape
+            samples = np.zeros((sample_n * 3, var_n +1), np.float32)
+            samples[:, :-1] = np.repeat(temp, 3, axis=0)
+            samples[:, -1] = np.tile(np.arange(3), sample_n)
+        
+            pred = np.array([self._boost.predict(s) for s in samples])
+            pred = pred.reshape(-1, 3).argmax(1)
+        else: pred = 0
+        return pred

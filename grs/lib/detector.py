@@ -15,6 +15,4 @@ class BProjectionDetector(Detector):
         self.hist = hist
 
     def detect(self, frame):
-        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        blur = cv2.medianBlur(hsv, 5)
-        return cv2.calcBackProject([blur], [0, 1], self.hist, ranges=[0, 180, 0, 255], scale=1.0)
+        return cv2.calcBackProject([frame], [0, 1], self.hist, ranges=[0, 180, 0, 255], scale=1.0)

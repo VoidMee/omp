@@ -17,5 +17,9 @@
 """
 __all__ = [
            "grabber",
-           "trainer"
+           "trainer",
+           "util",
+           "handler",
+           "recognizer",
+           "detector"
            ]

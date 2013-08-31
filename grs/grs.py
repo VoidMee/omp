@@ -1,19 +1,26 @@
 import numpy as np
 import cv2
+import win32api as wa
+
 
 from cfg.constants import *
 from lib.grabber import FrameGrabber
 from lib.detector import BProjectionDetector
 from lib.tracker import CamShiftTracker
+from lib.recognizer import HandRecognizer
+from lib.handler import MouseHandler
 
 class GRS(object):
     def __init__(self):
-        #initialize frame grabber
+        print "initializing frame grabber"
         self._grabber = FrameGrabber()
+        print "frame grabber initialized"
 
-        #learn skin 
+        print "learning skin color"
         self._learnHist()
+        print "skin color learned"
         self._winname = "GRS"
+        self._dilationFilter = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 4))
 
         #intialize detector
         self._detector = BProjectionDetector(self._hist)
@@ -23,11 +30,23 @@ class GRS(object):
         self._tracker = CamShiftTracker(( cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_MAX_ITER, 10, 1))
 
         #initialize recognizer
-        #self._recognizer 
+        self._recognizer = HandRecognizer()
+
+        self._handler = MouseHandler()
+
+        self._fstartx = 60
+        self._fstarty = 60
+
+        dict = wa.GetMonitorInfo(1) #argument 1 for standard input Monitor
+        _, _, xmax, ymax = dict['Monitor']
+
+        self._fwidth = int(0.4 * xmax)
+        self._fheight = int(0.4 * ymax)
+
     def _learnHist(self):
         skin = cv2.imread(PROJECTDIR + DATAPATHNAME + SKINDIRNAME + SKINFILENAME)
         gray = cv2.cvtColor(skin, cv2.COLOR_BGR2GRAY)
-        _, mask = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY)
+        _, mask = cv2.threshold(gray, 10, 255, cv2.THRESH_BINARY)
         hsv = cv2.cvtColor(skin, cv2.COLOR_BGR2HSV)
         self._hist = cv2.calcHist([hsv], [0, 1], mask, [36, 50], [0, 180, 0, 255])
         pass
@@ -35,23 +54,67 @@ class GRS(object):
     def _grabNext(self):
         self._frame = self._grabber.grabNext()
 
+    def _preprocess(self):
+        self._frame = cv2.medianBlur(self._frame, 3)
+        self._frame = cv2.cvtColor(self._frame, cv2.COLOR_BGR2HSV)
+
+    def _rearrangeSelection(self, (x, y, w, h)):
+        if w > 1.5 * h:
+            h = 1.3 * h
+        return (int(x - 0.2 * w), int(y - 0.18 * h), int(1.8 * w), int(1.3 * h))
 
     def run(self):
+        postures = ["fist", "open", "none"]
+        back_project = False
         self._grabNext()
         while self._frame != None:
 
-            tmp_frame = self._detector.detect(self._frame)
+            #store image temporarily
+            temp_frame = self._frame
 
-            retval, (x, y, w, h) = self._tracker.track(tmp_frame, self._selection)
-            if all((x, y, w, h)) > 0:
+            #preprocess the frame   1. median blur  2. conversion to hsv
+            self._preprocess()
+
+            #backproject the frame
+            self._frame = self._detector.detect(self._frame)
+
+            #apply erosion
+            #self._frame = cv2.erode(self._frame, np.ones((3,3), np.uint8))
+
+            #apply dilation
+            #self._frame = cv2.dilate(self._frame, self._dilationFilter)
+
+            retval, (x, y, w, h) = self._tracker.track(self._frame, self._selection)
+
+            (x, y, w, h) = self._rearrangeSelection((x, y, w, h))
+            if x > 0 and y >0 and w > 0 and h > 0 and (x + w) < self._frame.shape[1] and (y + h) < self._frame.shape[0]:
                 self._selection = (x, y, w, h)
 
-            cv2.imshow(self._winname, self._frame)
+                #to write in image
+                #cv2.putText(temp_frame, str(x) + str(y) + str(w) + str(h), (30, 30), cv2.FONT_HERSHEY_COMPLEX, 1, (200, 0, 0))
+                
+                #recognize
+                posture = self._recognizer.recognize(temp_frame, self._selection)
+
+                print postures[posture]
+
+                #handle mouse event
+                self._handler.handle((x, y, w, h), posture)
+
+            cv2.rectangle(temp_frame, (self._fstartx, self._fstarty), (self._fstartx + self._fwidth, self._fstarty + self._fheight), (0, 0, 255), 2)
+            cv2.rectangle(temp_frame, (x, y), (x +w, y + h), (200, 0, 0), 2)
+            cv2.circle(temp_frame, (int(x + w / 2.0), int(y + h / 2.0)), 2, (0, 255, 0), 1)
+            if back_project:
+                cv2.imshow(self._winname, self._frame)
+            else:
+                cv2.imshow(self._winname, temp_frame)
 
             c = cv2.waitKey(1)
             if c == 27:
                 cv2.destroyWindow(self._winname)
                 break
+            elif c == ord('b'):
+                back_project = not back_project
 
             self._grabNext()
         cv2.destroyAllWindows()

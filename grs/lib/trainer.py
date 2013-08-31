@@ -2,8 +2,7 @@ import cv2
 import numpy as np
 import threading
 import wx
-
-from cfg.constants import *
+import os
 
 class NNTrainer(threading.Thread):
     
@@ -125,6 +124,73 @@ class NNTrainer(threading.Thread):
         else:
             return False, "No Image file named " + paths[fidx]
 
+class BTrainer(object):
+    def __init__(self):
+        self.boost = cv2.Boost()
+        self.surf = cv2.SURF(400, 4, nOctaveLayers=4, extended=False)
+
+    def train(self):
+        samples = []
+
+        #for fist
+        print "collecting samples for fist"
+        fist_files = os.listdir("D:/workspace/python/omp/grs/data/trainings/fist")
+        for files in fist_files:
+            src = cv2.imread("D:/workspace/python/omp/grs/data/trainings/fist/" + files)
+            print files
+            k, d = self.surf.detectAndCompute(src, None)
+            if d != None:
+                m, e = cv2.PCACompute(d)
+                samples.append(m[0])
+        
+        #for open
+        print "collecting samples for open"
+        open_files = os.listdir("D:/workspace/python/omp/grs/data/trainings/open")
+        for files in open_files:
+            src = cv2.imread("D:/workspace/python/omp/grs/data/trainings/open/" + files)
+            print files
+            k, d = self.surf.detectAndCompute(src, None)
+            if d != None:
+                m, e = cv2.PCACompute(d)
+                samples.append(m[0])
+        """
+        #for negative
+        print "collecting samples for negative"
+        negatives = os.listdir("D:/workspace/python/omp/grs/data/trainings/NegativeImages")
+        for files in negatives:
+            src = cv2.imread("D:/workspace/python/omp/grs/data/trainings/NegativeImages/" + files)
+            print files
+            k, d = self.surf.detectAndCompute(src, None)
+            if d != None:
+                m, e = cv2.PCACompute(d)
+                samples.append(m[0])
+        print "finished collecting samples"
+        """
+        samples = np.array(samples, dtype=np.float32)
+    
+        sample_n, var_n = samples.shape
+        new_samples = np.zeros((sample_n * 3, var_n +1), np.float32)
+        new_samples[:, :-1] = np.repeat(samples, 3, axis=0)
+        new_samples[:, -1] = np.tile(np.arange(3), sample_n)
+
+        
+        responses = [1, 0, 0] * len(fist_files)
+        responses += [0, 1, 0] * len(open_files)
+        #responses += [0, 0, 1] * len(negatives)
+
+        print len(new_samples)
+        print len(responses)
+
+        new_responses = np.array(responses, dtype=np.int32)
+
+        var_types = np.array([cv2.CV_VAR_NUMERICAL] * var_n + [cv2.CV_VAR_CATEGORICAL, cv2.CV_VAR_CATEGORICAL], np.uint8)
+    
+        
+        ret = self.boost.train(new_samples, cv2.CV_ROW_SAMPLE, new_responses, varType=var_types, params=dict(max_depth=5))
+        print ret
+        self.boost.save("D:/model.xml")
+        self.boost.load("D:/model.xml")
+        pass
 
 class BoostTrainer(threading.Thread):
     """
@@ -235,4 +301,8 @@ class BoostTrainer(threading.Thread):
         print new_responses
         return new_responses
 
-__all__ = ["NNTrainer"]
+__all__ = ["NNTrainer", "BoostTrainer", "BTrainer"]
+
+if __name__ == "__main__":
+    boost = BTrainer()
+    boost.train()
