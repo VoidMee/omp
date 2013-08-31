@@ -1,5 +1,6 @@
 import win32api as wa
 import win32con as wc
+import math
 
 from abc import ABCMeta, abstractmethod
 
@@ -57,19 +58,19 @@ class MouseHandler(Handler):
             if self.state == 1 and posture == 0:
 
                 #print "click"
-                wa.mouse_event(wc.MOUSEEVENTF_LEFTDOWN, pcx, pcy)
+                #wa.mouse_event(wc.MOUSEEVENTF_LEFTDOWN, pcx, pcy)
                 self.state = 0
             elif self.state == 0 and posture == 1:
                 #print "pointer"
-                wa.mouse_event(wc.MOUSEEVENTF_LEFTUP, pcx, pcy)
+                #wa.mouse_event(wc.MOUSEEVENTF_LEFTUP, pcx, pcy)
                 self.state = 1
             elif self.state == 0 and posture == 2:
                 pass
         else:
            print "outside threshold"
            #move cursor and do not apply gesture
-           mx = int(2.5 * (mx - 60))
-           my = int(2.5 * (my - 60))
+           mx = int(math.ceil(3.1 * (mx - 100)))
+           my = int(math.ceil(2.4 * (my - 80)))
            wa.SetCursorPos((mx, my))
            #pcx = int(pcx * self.xmax / self.fx)
            #pcy = int(pcy * self.ymax / self.fy)

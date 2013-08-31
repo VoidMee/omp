@@ -34,14 +34,16 @@ class GRS(object):
 
         self._handler = MouseHandler()
 
-        self._fstartx = 60
-        self._fstarty = 60
+        self._fstartx = 100
+        self._fstarty = 80
 
         dict = wa.GetMonitorInfo(1) #argument 1 for standard input Monitor
         _, _, xmax, ymax = dict['Monitor']
 
-        self._fwidth = int(0.4 * xmax)
-        self._fheight = int(0.4 * ymax)
+        #self._fwidth = int(0.4 * xmax)
+        self._fwidth = 440
+        self._fheight = 320
+        #self._fheight = int(0.4 * ymax)
 
     def _learnHist(self):
         skin = cv2.imread(PROJECTDIR + DATAPATHNAME + SKINDIRNAME + SKINFILENAME)
